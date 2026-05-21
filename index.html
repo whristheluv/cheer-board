@@ -15,89 +15,96 @@ body {
 }
 :root { --font: "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic","나눔고딕",sans-serif; }
 
-/* ── 편집 뷰 ── */
 #edit-view { padding: 16px 16px 100px; }
 
 #preview-wrap {
   background: #000;
   border-radius: 16px;
   min-height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; margin-bottom: 14px;
 }
 #preview-text {
-  font-family: var(--font);
-  font-weight: 700;
-  font-size: 2.6rem;
-  color: #FFD700;
-  text-align: center;
-  padding: 1rem;
-  word-break: keep-all;
-  white-space: pre-line;
-  line-height: 1.3;
-  transition: color 0.2s;
+  font-family: var(--font); font-weight: 700; font-size: 2.6rem;
+  color: #FFD700; text-align: center; padding: 1rem;
+  word-break: keep-all; white-space: pre-line; line-height: 1.3;
 }
 
-/* 입력 + 이동 버튼 */
+/* 입력 + 버튼 행 */
 #input-row { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
 #name-input {
-  flex: 1;
-  font-size: 17px;
-  font-family: var(--font);
-  font-weight: 700;
-  padding: 11px 14px;
-  border-radius: 12px;
-  border: 1px solid #333;
-  background: #1c1c1e;
-  color: #fff;
-  outline: none;
+  flex: 1; font-size: 17px; font-family: var(--font); font-weight: 700;
+  padding: 11px 14px; border-radius: 12px; border: 1px solid #333;
+  background: #1c1c1e; color: #fff; outline: none;
 }
 #name-input::placeholder { color: #555; }
 #go-btn {
-  width: 52px; height: 52px;
-  border-radius: 14px;
-  background: #39FF85;
-  border: none;
-  cursor: pointer;
+  width: 52px; height: 52px; border-radius: 14px;
+  background: #39FF85; border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 16px #39FF8566;
-  flex-shrink: 0;
-  transition: transform 0.1s;
+  box-shadow: 0 0 16px #39FF8566; flex-shrink: 0; transition: transform 0.1s;
 }
 #go-btn:active { transform: scale(0.92); }
 #go-btn svg { width: 24px; height: 24px; }
 
+/* 공유 + 즐겨찾기 버튼 행 */
+#action-row {
+  display: flex; gap: 8px; margin-bottom: 16px;
+}
+.action-btn {
+  flex: 1; padding: 9px 0; border-radius: 10px;
+  border: 1px solid #333; background: #1c1c1e;
+  color: #ccc; font-size: 13px; font-family: var(--font);
+  font-weight: 700; cursor: pointer; transition: background 0.15s, color 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.action-btn:active { background: #2a2a2a; }
+.action-btn.fav-active { border-color: #FFD700; color: #FFD700; }
+
+/* 즐겨찾기 목록 */
+#fav-section { margin-bottom: 14px; display: none; }
+#fav-list { display: flex; flex-direction: column; gap: 6px; }
+.fav-item {
+  display: flex; align-items: center; gap: 8px;
+  background: #1c1c1e; border-radius: 10px; padding: 8px 12px;
+  border: 1px solid #2a2a2a;
+}
+.fav-load {
+  flex: 1; text-align: left; background: none; border: none;
+  color: #ccc; font-size: 13px; font-family: var(--font); font-weight: 700;
+  cursor: pointer; padding: 0;
+}
+.fav-del {
+  background: none; border: none; color: #555; font-size: 16px;
+  cursor: pointer; padding: 0 2px; line-height: 1;
+}
+.fav-del:hover { color: #ff4444; }
+
+/* 팬덤 프리셋 */
+.fandom-chip {
+  font-size: 12px; padding: 5px 11px; border-radius: 99px;
+  border: 0.5px solid #333; background: transparent; cursor: pointer;
+  font-family: var(--font); font-weight: 700; color: #ccc;
+  transition: border 0.12s, background 0.12s;
+  display: flex; align-items: center; gap: 5px;
+}
+.fandom-chip:active { background: #222; }
+
 .section-label {
-  font-size: 11px;
-  color: #888;
-  margin: 0 0 7px;
-  letter-spacing: 0.03em;
+  font-size: 11px; color: #888; margin: 0 0 7px; letter-spacing: 0.03em;
 }
 .chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
 .chip {
-  font-size: 12px;
-  padding: 5px 12px;
-  border-radius: 99px;
-  border: 0.5px solid #333;
-  background: transparent;
-  cursor: pointer;
-  font-family: var(--font);
-  font-weight: 700;
-  color: #ccc;
+  font-size: 12px; padding: 5px 12px; border-radius: 99px;
+  border: 0.5px solid #333; background: transparent; cursor: pointer;
+  font-family: var(--font); font-weight: 700; color: #ccc;
   transition: border 0.12s, background 0.12s;
 }
 .chip.active { border: 1.5px solid #fff; background: #222; color: #fff; }
 
 .color-dot {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: border 0.12s;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer; flex-shrink: 0;
 }
 .color-dot.active { border: 2.5px solid #fff; }
 
@@ -105,47 +112,37 @@ body {
 .slider-row input[type=range] { flex: 1; accent-color: #39FF85; }
 .slider-val { font-size: 12px; color: #888; min-width: 28px; }
 
-/* ── 전광판 오버레이 ── */
-#board-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #000;
-  overflow: hidden;
+/* 토스트 */
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #333; color: #fff; padding: 10px 20px; border-radius: 99px;
+  font-size: 13px; font-family: var(--font); font-weight: 700;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 99999;
+  white-space: nowrap;
 }
-/* 세로 화면을 CSS rotate로 가로처럼 보이게 */
+#toast.show { opacity: 1; }
+
+/* 전광판 오버레이 */
+#board-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: #000; overflow: hidden;
+}
 #board-inner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute; top: 50%; left: 50%;
+  display: flex; align-items: center; justify-content: center;
   transform-origin: center center;
 }
 #board-display {
-  font-family: var(--font);
-  font-weight: 700;
-  text-align: center;
-  word-break: keep-all;
-  white-space: pre-line;
-  line-height: 1.25;
-  color: #FFD700;
+  font-family: var(--font); font-weight: 700; text-align: center;
+  word-break: keep-all; white-space: pre-line; line-height: 1.25; color: #FFD700;
 }
 #board-close {
-  position: fixed;
-  top: 14px; right: 14px;
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  border: none;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
+  position: fixed; top: 14px; right: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.15); border: none;
+  color: #fff; font-size: 18px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  z-index: 10000;
-  backdrop-filter: blur(4px);
+  z-index: 10000; backdrop-filter: blur(4px);
 }
 
 @keyframes pulse { from{opacity:1;} to{opacity:0.75;} }
@@ -160,10 +157,10 @@ body {
 <body>
 
 <div id="edit-view">
-  <div id="preview-wrap"><div id="preview-text">EXO</div></div>
+  <div id="preview-wrap"><div id="preview-text">문구를 입력하세요</div></div>
 
   <div id="input-row">
-    <input id="name-input" type="text" value="EXO" placeholder="이름 입력" oninput="onInput()">
+    <input id="name-input" type="text" value="" placeholder="문구를 입력하세요" oninput="onInput()">
     <button id="go-btn" onclick="openBoard()" title="전광판 켜기">
       <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5"
            stroke-linecap="round" stroke-linejoin="round">
@@ -171,6 +168,23 @@ body {
       </svg>
     </button>
   </div>
+
+  <!-- 공유 + 즐겨찾기 저장 -->
+  <div id="action-row">
+    <button class="action-btn" onclick="shareURL()">🔗 링크 공유</button>
+    <button class="action-btn" id="fav-toggle-btn" onclick="toggleFavList()">★ 즐겨찾기</button>
+    <button class="action-btn" onclick="saveFav()">＋ 저장</button>
+  </div>
+
+  <!-- 즐겨찾기 목록 -->
+  <div id="fav-section">
+    <p class="section-label">저장된 즐겨찾기</p>
+    <div id="fav-list"></div>
+  </div>
+
+  <!-- 팬덤 프리셋 -->
+  <p class="section-label">팬덤 프리셋</p>
+  <div class="chip-row" id="fandom-grid"></div>
 
   <p class="section-label">데코</p>
   <div class="chip-row" id="deco-grid"></div>
@@ -186,185 +200,328 @@ body {
 
   <p class="section-label">크기</p>
   <div class="slider-row">
-    <input type="range" min="1.2" max="6" step="0.1" value="2.6" oninput="onSize(this.value)">
+    <input type="range" min="1.2" max="6" step="0.1" value="2.6" id="size-slider" oninput="onSize(this.value)">
     <span class="slider-val" id="size-val">2.6</span>
   </div>
 </div>
 
-<!-- 전광판 전체화면 -->
 <div id="board-overlay">
   <button id="board-close" onclick="closeBoard()">✕</button>
-  <div id="board-inner">
-    <div id="board-display">EXO</div>
-  </div>
+  <div id="board-inner"><div id="board-display">문구를 입력하세요</div></div>
 </div>
+
+<div id="toast"></div>
 
 <script>
 const FONT = '"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic","나눔고딕",sans-serif';
 
+const fandoms = [
+  {l:'BTS 💜',    bg:'#000000', color:'#9B59FF'},
+  {l:'EXO ❤️',    bg:'#000000', color:'#FF2626'},
+  {l:'aespa 🩵',  bg:'#000000', color:'#00D4FF'},
+  {l:'BLACKPINK 🖤', bg:'#000000', color:'#FF69B4'},
+  {l:'NewJeans 🩵', bg:'#FFFFFF', color:'#5599FF'},
+  {l:'IVE 💙',    bg:'#000000', color:'#4488FF'},
+  {l:'(G)I-DLE 🔮', bg:'#000000', color:'#CC88FF'},
+  {l:'SEVENTEEN 💎', bg:'#000000', color:'#00C8FF'},
+  {l:'NCT 💚',    bg:'#000000', color:'#00FF88'},
+  {l:'TWICE 🩷',  bg:'#000000', color:'#FF69B4'},
+  {l:'MONSTA X ⚡', bg:'#000000', color:'#FFD700'},
+  {l:'ENHYPEN 🖤', bg:'#000000', color:'#FFFFFF'},
+];
+
 const decos = [
-  {l:'없음',   b:'',        a:''},
-  {l:'⋆˚✿',   b:'⋆˚✿ ',  a:' ✿˚⋆'},
-  {l:'𐙚˚࿔',   b:'𐙚˚࿔ ',  a:' ࿔˚𐙚'},
-  {l:'𝜗𝜚˚⋆',  b:'𝜗𝜚˚⋆ ', a:' ⋆˚𝜗𝜚'},
-  {l:'✦₊',    b:'✦₊ ',    a:' ₊✦'},
-  {l:'☆彡',   b:'☆彡 ',   a:' 彡☆'},
-  {l:'⟡˖°',  b:'⟡ ˖° ',  a:' °˖ ⟡'},
-  {l:'＊·˚',  b:'＊·˚ ',  a:' ˚·＊'},
-  {l:'⊹₊⟡',  b:'⊹₊⟡ ',  a:' ⟡₊⊹'},
-  {l:'✩.*˚',  b:'✩.*˚ ',  a:' ˚*.✩'},
-  {l:'꒰˶꒱',  b:'꒰ ˶ ',   a:' ˶ ꒱'},
-  {l:'₊˚⊹♡', b:'₊˚⊹♡ ', a:' ♡⊹˚₊'},
+  {l:'없음',b:'',a:''},{l:'⋆˚✿',b:'⋆˚✿ ',a:' ✿˚⋆'},
+  {l:'𐙚˚࿔',b:'𐙚˚࿔ ',a:' ࿔˚𐙚'},{l:'𝜗𝜚˚⋆',b:'𝜗𝜚˚⋆ ',a:' ⋆˚𝜗𝜚'},
+  {l:'✦₊',b:'✦₊ ',a:' ₊✦'},{l:'☆彡',b:'☆彡 ',a:' 彡☆'},
+  {l:'⟡˖°',b:'⟡ ˖° ',a:' °˖ ⟡'},{l:'＊·˚',b:'＊·˚ ',a:' ˚·＊'},
+  {l:'⊹₊⟡',b:'⊹₊⟡ ',a:' ⟡₊⊹'},{l:'✩.*˚',b:'✩.*˚ ',a:' ˚*.✩'},
+  {l:'꒰˶꒱',b:'꒰ ˶ ',a:' ˶ ꒱'},{l:'₊˚⊹♡',b:'₊˚⊹♡ ',a:' ♡⊹˚₊'},
 ];
-const bgs = [
-  {l:'블랙', v:'#000000'},
-  {l:'화이트', v:'#FFFFFF'},
-];
+const bgs = [{l:'블랙',v:'#000000'},{l:'화이트',v:'#FFFFFF'}];
 const colors = [
-  {h:'#FFD700',l:'골드'}, {h:'#FF69B4',l:'핑크'}, {h:'#FFFFFF',l:'화이트'},
-  {h:'#00CFFF',l:'하늘'}, {h:'#00FFB0',l:'민트'}, {h:'#CC88FF',l:'퍼플'},
-  {h:'#FF4444',l:'레드'}, {h:'#000000',l:'블랙'},
+  {h:'#FFD700',l:'골드'},{h:'#FF69B4',l:'핑크'},{h:'#FFFFFF',l:'화이트'},
+  {h:'#00CFFF',l:'하늘'},{h:'#00FFB0',l:'민트'},{h:'#CC88FF',l:'퍼플'},
+  {h:'#FF4444',l:'레드'},{h:'#000000',l:'블랙'},
 ];
 const effects = [
-  {l:'기본',id:'pulse'}, {l:'깜빡임',id:'blink'},
-  {l:'무지개',id:'rainbow'}, {l:'흐르기',id:'scroll'},
+  {l:'기본',id:'pulse'},{l:'깜빡임',id:'blink'},
+  {l:'무지개',id:'rainbow'},{l:'흐르기',id:'scroll'},
 ];
 
-const S = {
-  name:'EXO', deco:decos[0], bg:bgs[0],
-  color:colors[0], effect:'pulse', size:2.6,
+const S = { name:'', deco:decos[0], bg:bgs[0], color:colors[0], effect:'pulse', size:2.6 };
+const $id = id => document.getElementById(id);
+const clampSize = value => {
+  const n = Number.parseFloat(value);
+  if (!Number.isFinite(n)) return 2.6;
+  return Math.min(6, Math.max(1.2, n));
+};
+const safeParam = value => {
+  if (!value) return '';
+  try { return decodeURIComponent(value); } catch { return value; }
+};
+const findColor = value => {
+  const hex = safeParam(value).toUpperCase();
+  return colors.find(x=>x.h.toUpperCase()===hex) ||
+    (/^#[0-9A-F]{6}$/.test(hex) ? {h:hex,l:'custom'} : null);
 };
 
-const $id = id => document.getElementById(id);
+// ── URL 파라미터로 초기 상태 복원 ──
+(function loadFromURL() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('n')) {
+    S.name = safeParam(p.get('n'));
+    $id('name-input').value = S.name;
+  }
+  if (p.get('d')) { const i = parseInt(p.get('d')); if (decos[i]) S.deco = decos[i]; }
+  if (p.get('bg')) { const b = bgs.find(x=>x.v===safeParam(p.get('bg'))); if(b) S.bg=b; }
+  if (p.get('c')) { const c = findColor(p.get('c')); if(c) S.color=c; }
+  if (p.get('e')) { if(effects.find(x=>x.id===p.get('e'))) S.effect=p.get('e'); }
+  if (p.get('s')) S.size = clampSize(p.get('s'));
+  $id('size-slider').value = S.size;
+  $id('size-val').textContent = S.size.toFixed(1);
+})();
 
 function buildText() { return S.deco.b + S.name + S.deco.a; }
+
+function showToast(msg) {
+  const t = $id('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── 공유 URL ──
+function shareURL() {
+  const p = new URLSearchParams();
+  p.set('n', S.name);
+  p.set('d', decos.indexOf(S.deco));
+  p.set('bg', S.bg.v);
+  p.set('c', S.color.h);
+  p.set('e', S.effect);
+  p.set('s', S.size);
+  const url = location.origin + location.pathname + '?' + p.toString();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url)
+      .then(() => showToast('링크 복사됨 🔗'))
+      .catch(() => prompt('아래 링크를 복사하세요', url));
+  } else {
+    prompt('아래 링크를 복사하세요', url);
+  }
+}
+
+// ── 즐겨찾기 ──
+function getFavs() {
+  try { return JSON.parse(localStorage.getItem('cheerFavs') || '[]'); } catch { return []; }
+}
+function saveFavs(arr) {
+  try {
+    localStorage.setItem('cheerFavs', JSON.stringify(arr));
+    return true;
+  } catch {
+    showToast('저장공간을 사용할 수 없어요');
+    return false;
+  }
+}
+
+function saveFav() {
+  if (!S.name.trim()) { showToast('문구를 먼저 입력하세요'); return; }
+  const favs = getFavs();
+  const entry = {
+    name: S.name, deco: decos.indexOf(S.deco),
+    bg: S.bg.v, color: S.color.h, effect: S.effect, size: S.size,
+    label: buildText().slice(0, 20),
+  };
+  favs.unshift(entry);
+  if (favs.length > 10) favs.pop();
+  if (!saveFavs(favs)) return;
+  renderFavList();
+  showToast('즐겨찾기 저장됨 ★');
+}
+
+function loadFav(entry) {
+  S.name = entry.name;
+  S.deco = decos[entry.deco] || decos[0];
+  S.bg = bgs.find(b=>b.v===entry.bg) || bgs[0];
+  S.color = findColor(entry.color) || colors[0];
+  S.effect = entry.effect || 'pulse';
+  S.size = entry.size || 2.6;
+  $id('name-input').value = S.name;
+  $id('size-slider').value = S.size;
+  $id('size-val').textContent = S.size.toFixed(1);
+  syncChipUI();
+  applyPreview();
+  showToast('불러왔어요 ✓');
+}
+
+function deleteFav(idx) {
+  const favs = getFavs(); favs.splice(idx, 1); if (saveFavs(favs)) renderFavList();
+}
+
+function renderFavList() {
+  const favs = getFavs();
+  const list = $id('fav-list');
+  const sec = $id('fav-section');
+  list.innerHTML = '';
+  if (!favListOpen || favs.length === 0) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  favs.forEach((f, i) => {
+    const row = document.createElement('div');
+    row.className = 'fav-item';
+    const lb = document.createElement('button');
+    lb.className = 'fav-load';
+    lb.textContent = f.label || f.name;
+    lb.onclick = () => loadFav(f);
+    const db = document.createElement('button');
+    db.className = 'fav-del';
+    db.textContent = '×';
+    db.onclick = () => deleteFav(i);
+    row.appendChild(lb); row.appendChild(db);
+    list.appendChild(row);
+  });
+}
+
+let favListOpen = false;
+function toggleFavList() {
+  favListOpen = !favListOpen;
+  const sec = $id('fav-section');
+  if (favListOpen) { renderFavList(); sec.style.display = getFavs().length ? 'block' : 'none'; }
+  else { sec.style.display = 'none'; }
+}
+
+// ── 팬덤 프리셋 적용 ──
+function applyFandom(f) {
+  S.bg = bgs.find(b=>b.v===f.bg) || bgs[0];
+  S.color = colors.find(c=>c.h===f.color) || {h:f.color,l:'custom'};
+  // 커스텀 컬러면 dot UI에 반영
+  document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('active'));
+  const matched = Array.from(document.querySelectorAll('.color-dot')).find(x=>x.style.background===f.color || x.dataset.hex===f.color);
+  if(matched) matched.classList.add('active');
+  syncChipUI();
+  applyPreview();
+}
+
+// ── UI 동기화 (칩 active 상태) ──
+function syncChipUI() {
+  ['deco-grid','bg-grid','effect-grid'].forEach(gid => {
+    document.querySelectorAll(`#${gid} .chip`).forEach(b => b.classList.remove('active'));
+  });
+  const decoIdx = decos.indexOf(S.deco);
+  const decoChips = document.querySelectorAll('#deco-grid .chip');
+  if (decoChips[decoIdx]) decoChips[decoIdx].classList.add('active');
+
+  const bgIdx = bgs.indexOf(S.bg);
+  const bgChips = document.querySelectorAll('#bg-grid .chip');
+  if (bgChips[bgIdx]) bgChips[bgIdx].classList.add('active');
+
+  const effChips = document.querySelectorAll('#effect-grid .chip');
+  effChips.forEach(b => { if(b.dataset.id===S.effect) b.classList.add('active'); });
+
+  document.querySelectorAll('.color-dot').forEach(b => {
+    b.classList.toggle('active', b.dataset.hex === S.color.h);
+  });
+}
 
 function clearAnims(el) {
   el.style.animation = '';
   el.style.color = S.color.h;
-  clearInterval(window._st);
-  clearInterval(window._bst);
-  el.style.whiteSpace = 'pre-line';
-  el.style.transform = '';
+  clearInterval(window._st); clearInterval(window._bst);
+  el.style.whiteSpace = 'pre-line'; el.style.transform = '';
 }
 
 function applyEffect(el, isBoard) {
   clearAnims(el);
-  if (S.effect === 'pulse') {
-    el.style.animation = 'pulse 2s ease-in-out infinite alternate';
-  } else if (S.effect === 'blink') {
-    el.style.animation = 'blink 0.8s step-end infinite';
-  } else if (S.effect === 'rainbow') {
-    el.style.animation = 'rainbow 1.5s linear infinite';
-    el.style.color = '';
-  } else if (S.effect === 'scroll') {
-    el.style.whiteSpace = 'nowrap';
-    let x = 110;
-    const timer = setInterval(() => {
-      x -= 0.5;
-      el.style.transform = `translateX(${x}%)`;
-      if (x < -110) x = 110;
-    }, 16);
-    if (isBoard) window._bst = timer; else window._st = timer;
+  if (S.effect==='pulse') el.style.animation='pulse 2s ease-in-out infinite alternate';
+  else if (S.effect==='blink') el.style.animation='blink 0.8s step-end infinite';
+  else if (S.effect==='rainbow') { el.style.animation='rainbow 1.5s linear infinite'; el.style.color=''; }
+  else if (S.effect==='scroll') {
+    el.style.whiteSpace='nowrap'; let x=110;
+    const t=setInterval(()=>{ x-=0.5; el.style.transform=`translateX(${x}%)`; if(x<-110)x=110; },16);
+    if(isBoard) window._bst=t; else window._st=t;
   }
 }
 
 function applyPreview() {
   const el = $id('preview-text');
-  el.textContent = buildText();
+  const txt = buildText();
+  el.textContent = txt || '문구를 입력하세요';
   $id('preview-wrap').style.background = S.bg.v;
-  el.style.fontFamily = FONT;
-  el.style.fontWeight = '700';
+  el.style.fontFamily = FONT; el.style.fontWeight = '700';
   el.style.fontSize = S.size + 'rem';
   applyEffect(el, false);
 }
 
 function sizeBoard() {
-  const inner = $id('board-inner');
-  const disp  = $id('board-display');
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  // rotate -90deg: 세로 화면을 가로처럼
-  // 회전 후 실제 표시 너비 = vh, 높이 = vw
-  const displayW = vh;
-  const displayH = vw;
-  inner.style.width  = displayW + 'px';
-  inner.style.height = displayH + 'px';
-  inner.style.transform = `translate(-50%, -50%) rotate(-90deg)`;
-  const fs = Math.min(displayW * 0.18, displayH * 0.55);
-  disp.style.fontSize = fs + 'px';
-  disp.style.maxWidth = (displayW * 0.88) + 'px';
-}
-
-function applyBoard() {
-  const el = $id('board-display');
-  el.textContent = buildText();
-  $id('board-overlay').style.background = S.bg.v;
-  el.style.fontFamily = FONT;
-  el.style.fontWeight = '700';
-  applyEffect(el, true);
+  const inner=$id('board-inner'), disp=$id('board-display');
+  const vw=window.innerWidth, vh=window.innerHeight;
+  const shouldRotate = vh > vw;
+  inner.style.width=(shouldRotate ? vh : vw)+'px';
+  inner.style.height=(shouldRotate ? vw : vh)+'px';
+  inner.style.transform=`translate(-50%,-50%)${shouldRotate ? ' rotate(-90deg)' : ''}`;
+  disp.style.fontSize=Math.min(
+    (shouldRotate ? vh : vw)*0.18,
+    (shouldRotate ? vw : vh)*0.55
+  )+'px';
+  disp.style.maxWidth=((shouldRotate ? vh : vw)*0.88)+'px';
 }
 
 function openBoard() {
-  $id('board-overlay').style.display = 'block';
-  applyBoard();
-  sizeBoard();
+  const el=$id('board-display'), ov=$id('board-overlay');
+  const txt = buildText();
+  el.textContent = txt || '문구를 입력하세요';
+  ov.style.background=S.bg.v; ov.style.display='block';
+  el.style.fontFamily=FONT; el.style.fontWeight='700';
+  applyEffect(el,true); sizeBoard();
 }
-function closeBoard() {
-  $id('board-overlay').style.display = 'none';
-  clearInterval(window._bst);
-}
-window.addEventListener('resize', () => {
-  if ($id('board-overlay').style.display !== 'none') sizeBoard();
-});
+function closeBoard() { $id('board-overlay').style.display='none'; clearInterval(window._bst); }
+window.addEventListener('resize',()=>{ if($id('board-overlay').style.display!=='none') sizeBoard(); });
 
-function onInput() {
-  S.name = $id('name-input').value || '이름 입력';
-  applyPreview();
-}
-function onSize(v) {
-  S.size = parseFloat(v);
-  $id('size-val').textContent = parseFloat(v).toFixed(1);
-  applyPreview();
-}
+function onInput() { S.name=$id('name-input').value; applyPreview(); }
+function onSize(v) { S.size=clampSize(v); $id('size-val').textContent=S.size.toFixed(1); applyPreview(); }
 
-function makeChips(gridId, items, label, isActive, onPick) {
-  const g = $id(gridId);
-  items.forEach(item => {
-    const b = document.createElement('button');
-    b.className = 'chip' + (isActive(item) ? ' active' : '');
-    b.textContent = label(item);
-    b.onclick = () => {
-      onPick(item);
-      g.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      applyPreview();
-    };
+// ── 칩 렌더 ──
+function makeChips(gridId, items, label, isActive, onPick, dataId) {
+  const g=$id(gridId);
+  items.forEach(item=>{
+    const b=document.createElement('button');
+    b.className='chip'+(isActive(item)?' active':'');
+    b.textContent=label(item);
+    if(dataId) b.dataset.id=dataId(item);
+    b.onclick=()=>{ onPick(item); g.querySelectorAll('.chip').forEach(x=>x.classList.remove('active')); b.classList.add('active'); applyPreview(); };
     g.appendChild(b);
   });
 }
 
-makeChips('deco-grid',   decos,   d=>d.l, d=>d===S.deco,        d=>{ S.deco=d; });
-makeChips('bg-grid',     bgs,     b=>b.l, b=>b===S.bg,          b=>{ S.bg=b; });
-makeChips('effect-grid', effects, e=>e.l, e=>e.id===S.effect,   e=>{ S.effect=e.id; });
+makeChips('deco-grid',decos,d=>d.l,d=>d===S.deco,d=>{S.deco=d;});
+makeChips('bg-grid',bgs,b=>b.l,b=>b===S.bg,b=>{S.bg=b;});
+makeChips('effect-grid',effects,e=>e.l,e=>e.id===S.effect,e=>{S.effect=e.id;},e=>e.id);
 
-const cg = $id('color-grid');
-colors.forEach((c, i) => {
-  const b = document.createElement('button');
-  b.className = 'color-dot' + (i===0 ? ' active' : '');
-  b.style.background = c.h;
-  if (c.h === '#FFFFFF') b.style.outline = '0.5px solid #555';
-  b.title = c.l;
-  b.onclick = () => {
-    S.color = c;
-    cg.querySelectorAll('.color-dot').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    applyPreview();
-  };
+// 색상 점
+const cg=$id('color-grid');
+colors.forEach(c=>{
+  const b=document.createElement('button');
+  b.className='color-dot'+(c===S.color?' active':'');
+  b.style.background=c.h; b.dataset.hex=c.h; b.title=c.l;
+  if(c.h==='#FFFFFF') b.style.outline='0.5px solid #555';
+  b.onclick=()=>{ S.color=c; cg.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('active')); b.classList.add('active'); applyPreview(); };
   cg.appendChild(b);
 });
 
+// 팬덤 프리셋 칩
+const fg=$id('fandom-grid');
+fandoms.forEach(f=>{
+  const b=document.createElement('button');
+  b.className='fandom-chip';
+  const dot=document.createElement('span');
+  dot.style.cssText=`display:inline-block;width:8px;height:8px;border-radius:50%;background:${f.color};flex-shrink:0;`;
+  b.appendChild(dot);
+  b.appendChild(document.createTextNode(f.l));
+  b.onclick=()=>applyFandom(f);
+  fg.appendChild(b);
+});
+
+// 초기 렌더
+syncChipUI();
 applyPreview();
+renderFavList();
 </script>
 </body>
 </html>
