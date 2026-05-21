@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>응원 전광판</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  background: #111;
+  color: #fff;
+  min-height: 100dvh;
+}
+:root { --font: "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic","나눔고딕",sans-serif; }
+
+/* ── 편집 뷰 ── */
+#edit-view { padding: 16px 16px 100px; }
+
+#preview-wrap {
+  background: #000;
+  border-radius: 16px;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+#preview-text {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: #FFD700;
+  text-align: center;
+  padding: 1rem;
+  word-break: keep-all;
+  white-space: pre-line;
+  line-height: 1.3;
+  transition: color 0.2s;
+}
+
+/* 입력 + 이동 버튼 */
+#input-row { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+#name-input {
+  flex: 1;
+  font-size: 17px;
+  font-family: var(--font);
+  font-weight: 700;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: #1c1c1e;
+  color: #fff;
+  outline: none;
+}
+#name-input::placeholder { color: #555; }
+#go-btn {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: #39FF85;
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 16px #39FF8566;
+  flex-shrink: 0;
+  transition: transform 0.1s;
+}
+#go-btn:active { transform: scale(0.92); }
+#go-btn svg { width: 24px; height: 24px; }
+
+.section-label {
+  font-size: 11px;
+  color: #888;
+  margin: 0 0 7px;
+  letter-spacing: 0.03em;
+}
+.chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+.chip {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  border: 0.5px solid #333;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font);
+  font-weight: 700;
+  color: #ccc;
+  transition: border 0.12s, background 0.12s;
+}
+.chip.active { border: 1.5px solid #fff; background: #222; color: #fff; }
+
+.color-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border 0.12s;
+}
+.color-dot.active { border: 2.5px solid #fff; }
+
+.slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.slider-row input[type=range] { flex: 1; accent-color: #39FF85; }
+.slider-val { font-size: 12px; color: #888; min-width: 28px; }
+
+/* ── 전광판 오버레이 ── */
+#board-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  overflow: hidden;
+}
+/* 세로 화면을 CSS rotate로 가로처럼 보이게 */
+#board-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+}
+#board-display {
+  font-family: var(--font);
+  font-weight: 700;
+  text-align: center;
+  word-break: keep-all;
+  white-space: pre-line;
+  line-height: 1.25;
+  color: #FFD700;
+}
+#board-close {
+  position: fixed;
+  top: 14px; right: 14px;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes pulse { from{opacity:1;} to{opacity:0.75;} }
+@keyframes blink { 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+@keyframes rainbow {
+  0%{color:#ff4444;} 20%{color:#ffaa00;}
+  40%{color:#ccff00;} 60%{color:#00ffcc;}
+  80%{color:#4466ff;} 100%{color:#ff4444;}
+}
+</style>
+</head>
+<body>
+
+<div id="edit-view">
+  <div id="preview-wrap"><div id="preview-text">EXO</div></div>
+
+  <div id="input-row">
+    <input id="name-input" type="text" value="EXO" placeholder="이름 입력" oninput="onInput()">
+    <button id="go-btn" onclick="openBoard()" title="전광판 켜기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+  </div>
+
+  <p class="section-label">데코</p>
+  <div class="chip-row" id="deco-grid"></div>
+
+  <p class="section-label">배경</p>
+  <div class="chip-row" id="bg-grid"></div>
+
+  <p class="section-label">글씨 색</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;" id="color-grid"></div>
+
+  <p class="section-label">효과</p>
+  <div class="chip-row" id="effect-grid"></div>
+
+  <p class="section-label">크기</p>
+  <div class="slider-row">
+    <input type="range" min="1.2" max="6" step="0.1" value="2.6" oninput="onSize(this.value)">
+    <span class="slider-val" id="size-val">2.6</span>
+  </div>
+</div>
+
+<!-- 전광판 전체화면 -->
+<div id="board-overlay">
+  <button id="board-close" onclick="closeBoard()">✕</button>
+  <div id="board-inner">
+    <div id="board-display">EXO</div>
+  </div>
+</div>
+
+<script>
+const FONT = '"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic","나눔고딕",sans-serif';
+
+const decos = [
+  {l:'없음',   b:'',        a:''},
+  {l:'⋆˚✿',   b:'⋆˚✿ ',  a:' ✿˚⋆'},
+  {l:'𐙚˚࿔',   b:'𐙚˚࿔ ',  a:' ࿔˚𐙚'},
+  {l:'𝜗𝜚˚⋆',  b:'𝜗𝜚˚⋆ ', a:' ⋆˚𝜗𝜚'},
+  {l:'✦₊',    b:'✦₊ ',    a:' ₊✦'},
+  {l:'☆彡',   b:'☆彡 ',   a:' 彡☆'},
+  {l:'⟡˖°',  b:'⟡ ˖° ',  a:' °˖ ⟡'},
+  {l:'＊·˚',  b:'＊·˚ ',  a:' ˚·＊'},
+  {l:'⊹₊⟡',  b:'⊹₊⟡ ',  a:' ⟡₊⊹'},
+  {l:'✩.*˚',  b:'✩.*˚ ',  a:' ˚*.✩'},
+  {l:'꒰˶꒱',  b:'꒰ ˶ ',   a:' ˶ ꒱'},
+  {l:'₊˚⊹♡', b:'₊˚⊹♡ ', a:' ♡⊹˚₊'},
+];
+const bgs = [
+  {l:'블랙', v:'#000000'},
+  {l:'화이트', v:'#FFFFFF'},
+];
+const colors = [
+  {h:'#FFD700',l:'골드'}, {h:'#FF69B4',l:'핑크'}, {h:'#FFFFFF',l:'화이트'},
+  {h:'#00CFFF',l:'하늘'}, {h:'#00FFB0',l:'민트'}, {h:'#CC88FF',l:'퍼플'},
+  {h:'#FF4444',l:'레드'}, {h:'#000000',l:'블랙'},
+];
+const effects = [
+  {l:'기본',id:'pulse'}, {l:'깜빡임',id:'blink'},
+  {l:'무지개',id:'rainbow'}, {l:'흐르기',id:'scroll'},
+];
+
+const S = {
+  name:'EXO', deco:decos[0], bg:bgs[0],
+  color:colors[0], effect:'pulse', size:2.6,
+};
+
+const $id = id => document.getElementById(id);
+
+function buildText() { return S.deco.b + S.name + S.deco.a; }
+
+function clearAnims(el) {
+  el.style.animation = '';
+  el.style.color = S.color.h;
+  clearInterval(window._st);
+  clearInterval(window._bst);
+  el.style.whiteSpace = 'pre-line';
+  el.style.transform = '';
+}
+
+function applyEffect(el, isBoard) {
+  clearAnims(el);
+  if (S.effect === 'pulse') {
+    el.style.animation = 'pulse 2s ease-in-out infinite alternate';
+  } else if (S.effect === 'blink') {
+    el.style.animation = 'blink 0.8s step-end infinite';
+  } else if (S.effect === 'rainbow') {
+    el.style.animation = 'rainbow 1.5s linear infinite';
+    el.style.color = '';
+  } else if (S.effect === 'scroll') {
+    el.style.whiteSpace = 'nowrap';
+    let x = 110;
+    const timer = setInterval(() => {
+      x -= 0.5;
+      el.style.transform = `translateX(${x}%)`;
+      if (x < -110) x = 110;
+    }, 16);
+    if (isBoard) window._bst = timer; else window._st = timer;
+  }
+}
+
+function applyPreview() {
+  const el = $id('preview-text');
+  el.textContent = buildText();
+  $id('preview-wrap').style.background = S.bg.v;
+  el.style.fontFamily = FONT;
+  el.style.fontWeight = '700';
+  el.style.fontSize = S.size + 'rem';
+  applyEffect(el, false);
+}
+
+function sizeBoard() {
+  const inner = $id('board-inner');
+  const disp  = $id('board-display');
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  // rotate -90deg: 세로 화면을 가로처럼
+  // 회전 후 실제 표시 너비 = vh, 높이 = vw
+  const displayW = vh;
+  const displayH = vw;
+  inner.style.width  = displayW + 'px';
+  inner.style.height = displayH + 'px';
+  inner.style.transform = `translate(-50%, -50%) rotate(-90deg)`;
+  const fs = Math.min(displayW * 0.18, displayH * 0.55);
+  disp.style.fontSize = fs + 'px';
+  disp.style.maxWidth = (displayW * 0.88) + 'px';
+}
+
+function applyBoard() {
+  const el = $id('board-display');
+  el.textContent = buildText();
+  $id('board-overlay').style.background = S.bg.v;
+  el.style.fontFamily = FONT;
+  el.style.fontWeight = '700';
+  applyEffect(el, true);
+}
+
+function openBoard() {
+  $id('board-overlay').style.display = 'block';
+  applyBoard();
+  sizeBoard();
+}
+function closeBoard() {
+  $id('board-overlay').style.display = 'none';
+  clearInterval(window._bst);
+}
+window.addEventListener('resize', () => {
+  if ($id('board-overlay').style.display !== 'none') sizeBoard();
+});
+
+function onInput() {
+  S.name = $id('name-input').value || '이름 입력';
+  applyPreview();
+}
+function onSize(v) {
+  S.size = parseFloat(v);
+  $id('size-val').textContent = parseFloat(v).toFixed(1);
+  applyPreview();
+}
+
+function makeChips(gridId, items, label, isActive, onPick) {
+  const g = $id(gridId);
+  items.forEach(item => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (isActive(item) ? ' active' : '');
+    b.textContent = label(item);
+    b.onclick = () => {
+      onPick(item);
+      g.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      applyPreview();
+    };
+    g.appendChild(b);
+  });
+}
+
+makeChips('deco-grid',   decos,   d=>d.l, d=>d===S.deco,        d=>{ S.deco=d; });
+makeChips('bg-grid',     bgs,     b=>b.l, b=>b===S.bg,          b=>{ S.bg=b; });
+makeChips('effect-grid', effects, e=>e.l, e=>e.id===S.effect,   e=>{ S.effect=e.id; });
+
+const cg = $id('color-grid');
+colors.forEach((c, i) => {
+  const b = document.createElement('button');
+  b.className = 'color-dot' + (i===0 ? ' active' : '');
+  b.style.background = c.h;
+  if (c.h === '#FFFFFF') b.style.outline = '0.5px solid #555';
+  b.title = c.l;
+  b.onclick = () => {
+    S.color = c;
+    cg.querySelectorAll('.color-dot').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    applyPreview();
+  };
+  cg.appendChild(b);
+});
+
+applyPreview();
+</script>
+</body>
+</html>
